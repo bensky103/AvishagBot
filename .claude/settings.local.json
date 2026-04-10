@@ -11,7 +11,15 @@
       "Bash(python -m pytest tests/test_issue_service.py::test_create_issue_report -v)",
       "Bash(python -m pytest tests/ -v)",
       "Bash(python -m pytest tests/test_agent_tools.py -v)",
-      "Bash(pytest tests/ -v)"
+      "Bash(pytest tests/ -v)",
+      "Bash(python -c \"from app.main import app; print\\('Import OK, routes:', [r.path for r in app.routes if hasattr\\(r, 'path'\\)]\\)\")",
+      "Bash(python -c ':*)",
+      "Bash(python -m pytest tests/ -x -q)",
+      "Bash([ -f \"$d/state/server-info\" ])",
+      "Bash(npx create-next-app@14 frontend-next --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --no-eslint --use-npm)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

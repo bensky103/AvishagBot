@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    color: #3d2a1f;
+    background: #f5efe8;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f5efe8;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #e8ddd0;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C45D3E;
+  }
+
+  :focus-visible {
+    outline: 2px solid #C45D3E;
+    outline-offset: 2px;
+  }
+
+  select, input, textarea {
+    color-scheme: light;
+  }
+}
+
+@keyframes slide-in-from-left {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-in.slide-in-from-left {
+  animation: slide-in-from-left 0.2s ease-out;
+}

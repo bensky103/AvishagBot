@@ -63,6 +63,25 @@ async def resolve_issue_report(session: AsyncSession, issue_id: int) -> IssueRep
     return await get_issue_report(session, issue_id)
 
 
+async def update_issue(session: AsyncSession, issue_id: int, **kwargs) -> IssueReport:
+    issue = await session.get(IssueReport, issue_id)
+    if not issue:
+        raise ValueError(f"Issue {issue_id} not found")
+    for key, value in kwargs.items():
+        if value is not None:
+            setattr(issue, key, value)
+    await session.commit()
+    return await get_issue_report(session, issue_id)
+
+
+async def reopen_issue_report(session: AsyncSession, issue_id: int) -> IssueReport:
+    issue = await session.get(IssueReport, issue_id)
+    issue.status = "open"
+    issue.resolved_at = None
+    await session.commit()
+    return await get_issue_report(session, issue_id)
+
+
 async def add_action_item(
     session: AsyncSession,
     issue_report_id: int,
@@ -94,6 +113,18 @@ async def complete_action_item(session: AsyncSession, action_item_id: int) -> Ac
         task = await session.get(Task, action.task_id)
         task.is_completed = True
         task.completed_at = datetime.utcnow()
+    await session.commit()
+    await session.refresh(action)
+    return action
+
+
+async def uncomplete_action_item(session: AsyncSession, action_item_id: int) -> ActionItem:
+    action = await session.get(ActionItem, action_item_id)
+    action.is_completed = False
+    if action.task_id:
+        task = await session.get(Task, action.task_id)
+        task.is_completed = False
+        task.completed_at = None
     await session.commit()
     await session.refresh(action)
     return action

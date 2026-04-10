@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_session
-from app.schemas.task import TaskCreate, TaskResponse
+from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
 from app.services import task_service
 
 router = APIRouter()
@@ -51,3 +51,15 @@ async def reopen_task(task_id: int, session: AsyncSession = Depends(get_session)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
     return await task_service.reopen_task(session, task_id)
+
+
+@router.patch("/{task_id}", response_model=TaskResponse)
+async def update_task(task_id: int, data: TaskUpdate, session: AsyncSession = Depends(get_session)):
+    task = await task_service.get_task(session, task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return await task_service.update_task(
+        session, task_id,
+        title=data.title, description=data.description,
+        due_date=data.due_date, urgency=data.urgency,
+    )

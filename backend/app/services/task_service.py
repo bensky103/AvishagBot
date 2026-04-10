@@ -66,3 +66,15 @@ async def reopen_task(session: AsyncSession, task_id: int) -> Task:
     await session.commit()
     await session.refresh(task)
     return task
+
+
+async def update_task(session: AsyncSession, task_id: int, **kwargs) -> Task:
+    task = await session.get(Task, task_id)
+    if not task:
+        raise ValueError(f"Task {task_id} not found")
+    for key, value in kwargs.items():
+        if value is not None:
+            setattr(task, key, value)
+    await session.commit()
+    await session.refresh(task)
+    return task

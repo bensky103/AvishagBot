@@ -5,3 +5,7 @@ __pycache__/
 data/
 .venv/
 .superpowers/
+.pytest_cache/
+*.egg-info/
+dist/
+.DS_Store
